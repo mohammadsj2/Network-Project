@@ -43,7 +43,7 @@ def run():
 
 
 if __name__ == '__main__':
-    proxy_num = int(input('proxy number'))
+    proxy_num = int(input('proxy number '))
     proxy_port = proxy_port + proxy_num
 
     server.bind((proxy_host, proxy_port))

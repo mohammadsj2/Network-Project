@@ -8,7 +8,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((host, port))
 
 # TODO Firewall part should be added.
-message = input('(shalgham | choghondar) [via port]')
+message = input('(shalgham | choghondar) [via port] ')
 client.send(message.encode('ascii'))
 
 
