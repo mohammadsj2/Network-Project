@@ -24,7 +24,7 @@ def init_connection(client: socket.socket):
         streamer_port = 8010
         socket_to_dest_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        if server_name == 'shalgham':
+        if server_name == 'chogondar':
             socket_to_dest_server.connect((host, chatroom_port))
         else:
             socket_to_dest_server.connect((host, streamer_port))
