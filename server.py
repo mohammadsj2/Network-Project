@@ -34,7 +34,7 @@ def init_connection(client: socket.socket):
         tunnels.append(t)
 
     else:
-        proxy_port = int(parts[2])
+        proxy_port = int(parts[1])
 
         host = '127.0.0.1'
         port = proxy_port
