@@ -1,6 +1,7 @@
 import socket
 import re
 from threading import Thread
+from config import *
 
 BUFFER_SIZE = 4096
 
@@ -53,7 +54,8 @@ class MessengerHandler:
         messages_string = ''
         for i in range(len(messages) - 1, -1, -1):
             message = messages[i]
-            if (message[1] == self.username and message[0] == other_user) or (message[0] == self.username and message[1] == other_user):
+            if (message[1] == self.username and message[0] == other_user) or (
+                    message[0] == self.username and message[1] == other_user):
                 if message[1] == self.username:
                     messages[i] = (message[0], message[1], message[2], True)
                     if msg_cnt < num:
@@ -99,7 +101,7 @@ class MessengerHandler:
                 self.username = msg
                 self.socket.send('Please enter your password.'.encode())
                 self.state = LOGIN_PASSWORD
-            elif self.state == LOGIN_PASSWORD:   # login(username, passwd)
+            elif self.state == LOGIN_PASSWORD:  # login(username, passwd)
                 if self.username not in users_passwords or users_passwords[self.username] != msg:
                     self.username = None
                     self.socket.send('Incorrect username or password.\n1. Sign Up\n2. Login\n3. Exit'.encode())
@@ -145,7 +147,7 @@ class MessengerHandler:
 
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(('', 8009))
+server_socket.bind(('', CHATROOM_PORT))
 server_socket.listen()
 print('Messenger server port:', server_socket.getsockname()[1])
 
