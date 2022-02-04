@@ -1,30 +1,55 @@
 import socket
 import threading
-
-server_host = '127.0.0.1'
-server_port = 8010
+from config import *
+from utils import *
+import cv2, numpy, pickle
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((server_host, server_port))
+server.bind((localhost, STREAMER_PORT))
 server.listen(10)
 
 
-def read_and_write(client: socket.socket):
-    while True:
-        try:
-            message = client.recv(1024).decode('ascii')
-            print(f'{message} is received in server ...')
-            client.send(f'You have sent us {message} ...'.encode('ascii'))
-        except Exception as e:
-            print(e)
+def stream_video(udp_socket: socket.socket, udp_port: int, video_path: str):
+    cap = cv2.VideoCapture(video_path)
+    while cap.isOpened():
+        ret, photo = cap.read()
+        cv2.imshow('Video Streamer', photo)
+        ret, buffer = cv2.imencode(".jpg", photo, [int(cv2.IMWRITE_JPEG_QUALITY), 30])
+        x_as_bytes = pickle.dumps(buffer)
+        udp_socket.sendto(x_as_bytes, (localhost, udp_port))
+        if cv2.waitKey(10) == 13:  # Press Enter then window will close
             break
+    cv2.destroyAllWindows()
+    cap.release()
+
+
+def menu(client: socket.socket):
+    send_message(client, "Welcome to Shalgham.")
+    l = len(VIDEO_NAMES)
+    for i in range(l):
+        send_message(client, str(i + 1) + ". " + VIDEO_NAMES[i])
+    send_message(client, str(l + 1) + ". Exit")
+    while True:
+        choice_number = get_message(client)
+        try:
+            choice_number = int(choice_number)
+        except Exception:
+            send_message(client, 'Choghondar: Please get a valid number.')
+        if choice_number == l + 1:
+            send_message(client, 'Choghondar: Bye.')
+        elif 1 <= choice_number <= l:
+            udp_socket, udp_port = udp_connection_request(client)
+            stream_video(udp_socket, udp_port, VIDEO_PATHS[choice_number - 1])
+            break
+        else:
+            send_message(client, 'Choghondar: Please get a valid number.')
 
 
 def run():
     while True:
         client, address = server.accept()
         print(address)
-        read_and_write_thread = threading.Thread(target=read_and_write, args=(client,))
+        read_and_write_thread = threading.Thread(target=menu, args=(client,))
         read_and_write_thread.start()
 
 
