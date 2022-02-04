@@ -1,36 +1,17 @@
 import socket
 import threading
-from tunnel import Tunnel
+from config import *
+from tunnel import connect_and_create_tunnel
 
-proxy_host = '127.0.0.1'
-proxy_port = 8011
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-tunnels = []
-
+# TODO: when we close connections in each file? They were sensitive in this matter at the first homework review time
 
 def init_connection(client: socket.socket):
     server_name = client.recv(1024).decode('ascii')
+    dest_port = server_to_port[server_name]
 
-    # TODO: maybe it is not a bad idea to write these addresses in a file and
-    #  write a function to read them from that instead of hardcode.
-
-    host = '127.0.0.1'
-    chatroom_port = 8009
-    streamer_port = 8010
-    socket_to_dest_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    if server_name == 'chogondar':
-        socket_to_dest_server.connect((host, chatroom_port))
-    else:
-        socket_to_dest_server.connect((host, streamer_port))
-
-    # TODO: race time! (fixed with dealy in server :D)
-    t = Tunnel(first_socket=client, second_socket=socket_to_dest_server)
-    t.run()
-
+    t = connect_and_create_tunnel(client, dest_port)
     tunnels.append(t)
-
 
 
 def run():
@@ -43,13 +24,23 @@ def run():
 
 
 if __name__ == '__main__':
-    proxy_num = int(input('proxy number '))
-    proxy_port = proxy_port + proxy_num
 
-    server.bind((proxy_host, proxy_port))
+    tunnels = []
+
+    while True:
+        proxy_port = int(input('Proxy port (put 0 for auto port picking):\n'))
+        if proxy_port in INVALID_PORTS:
+            print(f"Your port is in our invalid ports please choose another port that is not in {INVALID_PORTS}.")
+        else:
+            break
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((localhost, proxy_port))
     server.listen(10)
+    proxy_port = server.getsockname()[1]
 
-    run()
-
-
-
+    print(f'your proxy port is: {proxy_port}')
+    try:
+        run()
+    finally:
+        server.close()
