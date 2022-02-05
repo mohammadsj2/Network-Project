@@ -2,6 +2,7 @@ import socket
 import re
 from threading import Thread
 from config import *
+from utils import *
 
 CHATROOM_BUFFER_SIZE = 4096
 
@@ -83,6 +84,8 @@ class MessengerHandler:
                     self.socket.send('Please enter your username'.encode())
                     self.state = LOGIN_USERNAME
                 if msg == '3':
+                    send_message(self.socket, 'Choghondar: Bye.')
+                    send_message(self.socket, FINISH_CONNECTION)
                     self.socket.close()
                     running = False
             elif self.state == SIGN_UP_USERNAME:

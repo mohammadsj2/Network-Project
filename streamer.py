@@ -57,9 +57,11 @@ def menu(client: socket.socket):
         try:
             choice_number = int(choice_number)
         except Exception:
-            send_message(client, 'Choghondar: Please get a valid number.')
+            send_message(client, 'Shalgham: Please get a valid number.')
         if choice_number == l + 1:
-            send_message(client, 'Choghondar: Bye.')
+            send_message(client, 'Shalgham: Bye.')
+            send_message(client, FINISH_CONNECTION)
+            break
         elif 1 <= choice_number <= l:
             udp_socket, udp_port = udp_connection_request(client)
             sleep(1.5)

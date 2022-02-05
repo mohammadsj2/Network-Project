@@ -17,7 +17,7 @@ UDP_PORT_INFO_MESSAGE = '#UDP_PORT'
 BUFFER_SIZE = 100000000
 TCP_STREAMING_FINISH = '#STREAMING_FINISH'
 UDP_STREAMING_FINISH = '#STREAMING_FINISH'
-
+FINISH_CONNECTION = '#FINISH_CONNECTION'
 
 def udp_connection_request(client: socket.socket, is_tunnel: bool=False):
     send_message(client, UDP_NEEDED_MESSAGE)

@@ -16,6 +16,10 @@ def read():
             if message == UDP_NEEDED_MESSAGE:
                 handle_stream_thread = threading.Thread(target=handle_stream, args=(client, ))
                 handle_stream_thread.start()
+            elif message == FINISH_CONNECTION:
+                client.close()
+                print("Enter to exit ...")
+                break
             else:
                 print(message)
         except:
@@ -49,7 +53,8 @@ def write():
         try:
             send_message(client, message)
         except:
-            client.close()
+            # client.close()
+            break
 
 
 if __name__ == '__main__':

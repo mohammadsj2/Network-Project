@@ -27,7 +27,7 @@ class Tunnel:
                     udp_tunnel.run()
                 else:
                     self.second_socket.send(message.encode('ascii'))
-            except FileNotFoundError as e:
+            except Exception as e:
                 print('Error Happened in Tunnel:', e)
                 break
 
@@ -51,7 +51,7 @@ class Tunnel:
                     print(type(self.first_socket), self.first_socket)
 
                     self.first_socket.send(message.encode('ascii'))
-            except FileNotFoundError as e:
+            except Exception as e:
                 print('Error Happened in Tunnel:', e)
                 break
 
@@ -73,7 +73,7 @@ class UDPTunnel:
                 message = self.second_socket.recvfrom(BUFFER_SIZE)[0]
                 print('in udp tunnel', len(message))
                 self.first_socket.sendto(message, (localhost, self.first_port))
-            except FileNotFoundError as e:
+            except Exception as e:
                 print('Error Happened in Tunnel:', e)
                 break
 
