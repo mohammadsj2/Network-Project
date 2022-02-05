@@ -12,7 +12,7 @@ class Boolean:
     def __init__(self, b: bool):
         self.boolean = b
 
-def stream_video(udp_socket: socket.socket, udp_port: int, video_path: str, b: Boolean, tcp_socket: socket.socket):
+def stream_video(udp_socket: socket.socket, udp_port: int, video_delay: float, video_path: str, b: Boolean):
     cap = cv2.VideoCapture(video_path)
     while cap.isOpened():
         if not b.boolean:
@@ -20,10 +20,10 @@ def stream_video(udp_socket: socket.socket, udp_port: int, video_path: str, b: B
         try:
             ret, photo = cap.read()
             # cv2.imshow('Video Streamer', photo)
-            ret, buffer = cv2.imencode(".jpg", photo, [int(cv2.IMWRITE_JPEG_QUALITY), 60])
+            ret, buffer = cv2.imencode(".jpg", photo, [int(cv2.IMWRITE_JPEG_QUALITY), 30])
             x_as_bytes = pickle.dumps(buffer)
             udp_socket.sendto(x_as_bytes, (localhost, udp_port))
-            sleep(0.034)
+            sleep(video_delay)
         except Exception as e:
             byte_message = bytes(UDP_STREAMING_FINISH, "utf-8")
             for i in range(500):
@@ -66,7 +66,7 @@ def menu(client: socket.socket):
             sleep(1.5)
 
             b = Boolean(True)
-            stream_thread = threading.Thread(target=stream_video, args=(udp_socket, udp_port, VIDEO_PATHS[choice_number - 1], b, client,))
+            stream_thread = threading.Thread(target=stream_video, args=(udp_socket, udp_port, VIDEO_DELAY[choice_number - 1], VIDEO_PATHS[choice_number - 1], b,))
             # stream_video(udp_socket, udp_port, VIDEO_PATHS[choice_number - 1])
 
             stream_thread.start()

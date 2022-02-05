@@ -12,3 +12,5 @@ VIDEO_PATHS = [
     'videos/Pat_Mat_Theme.mp4',
     'videos/Tom_and_Jerry.mp4',
 ]
+
+VIDEO_DELAY = [0.005, 0.03]
