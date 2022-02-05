@@ -3,7 +3,7 @@ import re
 from threading import Thread
 from config import *
 
-BUFFER_SIZE = 4096
+CHATROOM_BUFFER_SIZE = 4096
 
 ENCODED_MAIN_MENU = '1. Sign Up\n2. Login\n3. Exit'.encode()
 
@@ -73,7 +73,7 @@ class MessengerHandler:
         self.socket.send(ENCODED_MAIN_MENU)
         running = True
         while running:
-            msg = self.socket.recv(BUFFER_SIZE).decode().rstrip('\n')
+            msg = self.socket.recv(CHATROOM_BUFFER_SIZE).decode().rstrip('\n')
             if self.state == MAIN_MENU:
                 msg = msg.strip()
                 if msg == '1':

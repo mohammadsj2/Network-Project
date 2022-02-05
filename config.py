@@ -7,10 +7,8 @@ server_to_port = {
     'choghondar': CHATROOM_PORT,
     'shalgham': STREAMER_PORT
 }
-VIDEO_NAMES = ['Pat & Mat Song', 'Zangoole', 'The Sheep', 'Tom & Jerry']
+VIDEO_NAMES = ['Pat & Mat Song', 'Tom & Jerry']
 VIDEO_PATHS = [
     'videos/Pat_Mat_Theme.mp4',
-    'videos/Pexels1.mp4',
-    'videos/Pexels2.mp4',
     'videos/Tom_and_Jerry.mp4',
 ]
