@@ -40,6 +40,8 @@ def init_connection(client: socket.socket, is_first_client: bool = False):
         if not firewall.is_valid(dest_port):
             send_message(client, 'packet dropped due to firewall rules')
             print('packet dropped due to firewall rules')
+            init_connection(client)
+            return
         else:
             t = connect_and_create_tunnel(client, dest_port, server_name)
             tunnels.append(t)
