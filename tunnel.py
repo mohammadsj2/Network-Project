@@ -21,7 +21,6 @@ class Tunnel:
             try:
                 message = self.first_socket.recv(1024).decode('ascii')
                 if message.split(' ')[0] == UDP_PORT_INFO_MESSAGE:
-                    print("I am here", message)
                     (first_udp_socket, first_udp_port) = udp_connection_request_with_port(int(message.split(' ')[1]))
                     udp_tunnel = UDPTunnel(first_udp_socket, first_udp_port, self.second_udp_socket)
                     udp_tunnel.run()
@@ -58,7 +57,6 @@ class UDPTunnel:
         self.first_port = first_port
 
     def run(self):
-        print('udp tunnel running')
         second_to_first_thread = threading.Thread(target=self.second_to_first)
         second_to_first_thread.start()
 
@@ -66,7 +64,6 @@ class UDPTunnel:
         while True:
             try:
                 message = self.second_socket.recvfrom(BUFFER_SIZE)[0]
-                print('in udp tunnel', len(message))
                 self.first_socket.sendto(message, (localhost, self.first_port))
             except Exception as e:
                 print('Error Happened in Tunnel:', e)
@@ -75,7 +72,6 @@ class UDPTunnel:
 
 def connect_and_create_tunnel(client: socket.socket, dest_port: int, message_to_dest: str = None) -> Tunnel:
     socket_to_dest_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print(dest_port)
     socket_to_dest_server.connect((localhost, dest_port))
 
     if message_to_dest is not None:

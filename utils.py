@@ -14,7 +14,7 @@ def send_message(client: socket.socket, message: str):
 
 UDP_NEEDED_MESSAGE = '#UDP_NEEDED'
 UDP_PORT_INFO_MESSAGE = '#UDP_PORT'
-BUFFER_SIZE = 1000000
+BUFFER_SIZE = 10000000
 TCP_STREAMING_FINISH = '#STREAMING_FINISH'
 UDP_STREAMING_FINISH = '#STREAMING_FINISH'
 FINISH_CONNECTION = '#FINISH_CONNECTION'
@@ -27,7 +27,6 @@ def udp_connection_request(client: socket.socket, is_tunnel: bool=False):
 
 
 def udp_connection_request_with_port(udp_port: int):
-    print("****Here: port for udp server", udp_port)
     udp_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_client.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, BUFFER_SIZE)
     return (udp_client, udp_port)
@@ -36,7 +35,6 @@ def handle_udp_connection_request(client: socket.socket) -> socket.socket:
     udp_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_server.bind((localhost, 0))
     port = udp_server.getsockname()[1]
-    print("Here: port for udp server", port)
     send_message(client, UDP_PORT_INFO_MESSAGE + ' ' + str(port))
     return udp_server
 

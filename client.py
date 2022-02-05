@@ -32,9 +32,7 @@ def handle_stream(client: socket.socket):
         data = x[0]
 
         if len(data) < 100:
-            print(data)
             if data.decode('utf-8') == UDP_STREAMING_FINISH:
-                print("DOROST")
                 send_message(client, TCP_STREAMING_FINISH)
                 break
 
