@@ -13,22 +13,28 @@ def send_message(client: socket.socket, message: str):
 
 
 UDP_NEEDED_MESSAGE = '#UDP_NEEDED'
-UDP_PORT_INFO_MESSAGE = '#UDP_PORT '
+UDP_PORT_INFO_MESSAGE = '#UDP_PORT'
 BUFFER_SIZE = 10000000
 
 
-def udp_connection_request(client: socket.socket):
+def udp_connection_request(client: socket.socket, is_tunnel: bool=False):
     send_message(client, UDP_NEEDED_MESSAGE)
-    udp_port = int(get_message(client).split()[1])
-    sleep(1.5)
+    if not is_tunnel:
+        udp_port = int(get_message(client).split()[1])
+        return udp_connection_request_with_port(udp_port)
+
+
+def udp_connection_request_with_port(udp_port: int):
+    print("****Here: port for udp server", udp_port)
     udp_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_client.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, BUFFER_SIZE)
     return (udp_client, udp_port)
-
 
 def handle_udp_connection_request(client: socket.socket) -> socket.socket:
     udp_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_server.bind((localhost, 0))
     port = udp_server.getsockname()[1]
-    send_message(client, UDP_PORT_INFO_MESSAGE + str(port))
+    print("Here: port for udp server", port)
+    send_message(client, UDP_PORT_INFO_MESSAGE + ' ' + str(port))
     return udp_server
+

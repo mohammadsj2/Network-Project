@@ -42,6 +42,7 @@ def menu(client: socket.socket):
             send_message(client, 'Choghondar: Bye.')
         elif 1 <= choice_number <= l:
             udp_socket, udp_port = udp_connection_request(client)
+            sleep(1.5)
             stream_video(udp_socket, udp_port, VIDEO_PATHS[choice_number - 1])
             break
         else:
