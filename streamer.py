@@ -24,7 +24,7 @@ def stream_video(udp_socket: socket.socket, udp_port: int, video_path: str, b: B
             x_as_bytes = pickle.dumps(buffer)
             print(len(x_as_bytes))
             udp_socket.sendto(x_as_bytes, (localhost, udp_port))
-            sleep(0.04)
+            sleep(0.034)
         except Exception as e:
             byte_message = bytes(UDP_STREAMING_FINISH, "utf-8")
             print("I am here")
