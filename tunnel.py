@@ -36,19 +36,14 @@ class Tunnel:
             try:
                 message = self.second_socket.recv(1024).decode('ascii')
                 if message == UDP_NEEDED_MESSAGE:
-                    print("udp request message recieved ")
-
 
                     self.second_udp_socket = handle_udp_connection_request(self.second_socket)
-                    print("na ta inja")
 
                     udp_connection_request(self.first_socket, True)
 
 
-                    print("ta inja?")
-
                 else:
-                    print(type(self.first_socket), self.first_socket)
+                    # print(type(self.first_socket), self.first_socket)
 
                     self.first_socket.send(message.encode('ascii'))
             except Exception as e:

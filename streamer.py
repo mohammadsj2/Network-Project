@@ -19,11 +19,12 @@ def stream_video(udp_socket: socket.socket, udp_port: int, video_path: str, b: B
             break
         try:
             ret, photo = cap.read()
-            #cv2.imshow('Video Streamer', photo)
-            ret, buffer = cv2.imencode(".jpg", photo, [int(cv2.IMWRITE_JPEG_QUALITY), 30])
+            # cv2.imshow('Video Streamer', photo)
+            ret, buffer = cv2.imencode(".jpg", photo, [int(cv2.IMWRITE_JPEG_QUALITY), 60])
             x_as_bytes = pickle.dumps(buffer)
             print(len(x_as_bytes))
             udp_socket.sendto(x_as_bytes, (localhost, udp_port))
+            sleep(0.04)
         except Exception as e:
             byte_message = bytes(UDP_STREAMING_FINISH, "utf-8")
             print("I am here")
