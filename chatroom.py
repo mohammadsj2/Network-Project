@@ -125,7 +125,7 @@ class MessengerHandler:
                 elif msg != self.username and msg in users_passwords:
                     self.socket.send(self.get_messages(msg, 5).encode())
                     self.state = CHATTING_WITH_PREFIX + msg
-                else:
+                elif msg == '/refresh':
                     self.socket.send(self.get_inbox().encode())
             elif self.state.startswith(CHATTING_WITH_PREFIX):
                 other_user = self.state[len(CHATTING_WITH_PREFIX):]
